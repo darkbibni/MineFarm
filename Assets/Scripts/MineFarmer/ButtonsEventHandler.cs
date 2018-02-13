@@ -66,4 +66,14 @@ public class ButtonsEventHandler : MonoBehaviour {
             uiMgr.CurrentPanel = uiMgr.authentificationPanel;
         }
     }
+
+    public void LeaderboardButtonEvent()
+    {
+        uiMgr.DisplayLeaderboard(true);
+    }
+
+    public void BackLbButtonEvent()
+    {
+        uiMgr.DisplayLeaderboard(false);
+    }
 }

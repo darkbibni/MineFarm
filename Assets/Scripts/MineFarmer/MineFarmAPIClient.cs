@@ -60,9 +60,14 @@ public class MineFarmAPIClient : MonoBehaviour {
 
         yield return www.SendWebRequest();
 
-        if (www.isNetworkError || www.isHttpError)
+        if (www.isNetworkError)
         {
-            Debug.Log(www.error);
+            gameMgr.Feedback("No network connection :(");
+        }
+
+        else if(www.isHttpError)
+        {
+            gameMgr.Feedback(ManagerErrorCode(www.responseCode));
         }
 
         else
@@ -70,7 +75,7 @@ public class MineFarmAPIClient : MonoBehaviour {
             Debug.Log("Status code : "+ www.responseCode +"\n"+ www.downloadHandler.text);
 
             // Feedback registration succeed !
-            gameMgr.FeedbackRegistered();
+            gameMgr.Feedback("You are now registered !");
         }
     }
 
@@ -85,15 +90,27 @@ public class MineFarmAPIClient : MonoBehaviour {
         string passwordJson = "\"" + password + "\"";
 
         // UnityWebRequest encode the body so ... we use that custom Http Request script.
-        Request www = new Request("POST", uri +"/api/User/" + nickname);
-        www.Text = passwordJson;
+        Request www = new Request("POST", uri + "/api/User/" + nickname)
+        {
+            Text = passwordJson
+        };
         AddRequestHeaders(www);
 
-        await www.Send();
+        // www.Send can throw exception and stop the calling method without try/catch.
+        try
+        {
+            await www.Send();
+        }
+
+        catch(Exception)
+        {
+            gameMgr.Feedback("Can't connect...");
+            return;
+        }
 
         var response = www.response;
 
-        Debug.LogWarning("[HTTP response] " + response.message + " (code " + response.status + ")");
+        gameMgr.Feedback(ManagerErrorCode(response.status));
 
         if (response != null)
         {
@@ -150,7 +167,7 @@ public class MineFarmAPIClient : MonoBehaviour {
     {
         if(!gameMgr.CanMineRock(rockIndex))
         {
-            // TODO Feedback incorrect !
+            gameMgr.uiMgr.FeedbackCantMine();
             yield break;
         }
 
@@ -189,6 +206,20 @@ public class MineFarmAPIClient : MonoBehaviour {
     }
 
     #endregion
+
+    private string ManagerErrorCode(long statusCode)
+    {
+        string response = "OULAH";
+
+        switch(statusCode)
+        {
+            case 403: response = "WHAT ARE YOU DOING ? >:("; break;
+            case 404: response = "I don't found what you search :("; break;
+            case 502: response = "Server OFF :("; break;
+        }
+
+        return response;
+    }
 
     /// <summary>
     /// Add some request headers.

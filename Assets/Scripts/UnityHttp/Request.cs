@@ -142,9 +142,9 @@ namespace Http
                                     var ssl = ostream as SslStream;
                                     ssl.AuthenticateAsClient(uri.Host);
                                 }
-                                catch (Exception)
+                                catch (Exception e)
                                 {
-                                    //Debug.LogError ("Exception: " + e.Message);
+                                    Debug.LogError ("Exception: " + e.Message);
                                     return;
                                 }
                             }
@@ -176,6 +176,8 @@ namespace Http
                 }
                 catch (Exception e)
                 {
+                    Debug.LogError("Exception: " + e.Message);
+
                     Console.WriteLine("Unhandled Exception, aborting request.");
                     Console.WriteLine(e);
                     exception = e;

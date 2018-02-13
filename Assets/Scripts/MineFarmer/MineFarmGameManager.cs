@@ -7,6 +7,9 @@ public class MineFarmGameManager : MonoBehaviour {
     
     public UiManager uiMgr;
 
+    [Header("Mine parameters")]
+    public float mineCooldown = 2.5f;
+
     [Header("Sfx")]
     public ParticleSystem goldVfx;
     public ParticleSystem diamondVfx;
@@ -41,7 +44,7 @@ public class MineFarmGameManager : MonoBehaviour {
     {
         canMine[rockIndex] = false;
 
-        yield return new WaitForSecondsRealtime(5f);
+        yield return new WaitForSecondsRealtime(mineCooldown);
 
         canMine[rockIndex] = true;
     }
@@ -103,8 +106,8 @@ public class MineFarmGameManager : MonoBehaviour {
         uiMgr.CurrentPanel = uiMgr.gamePanel;
     }
 
-    public void FeedbackRegistered()
+    public void Feedback(string message)
     {
-        uiMgr.DisplayAlert("You are now registered !");
+        uiMgr.DisplayAlert(message);
     }
 }

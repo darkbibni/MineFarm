@@ -1,14 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 using UnityEngine.UI;
 
 using DG.Tweening;
-using System;
 
+/// <summary>
+/// Manage all ui components of the game.
+/// </summary>
 public class UiManager : MonoBehaviour {
-    
+
+    #region Inspector attributes
+
+    public MineFarmGameManager gameMgr;
+
     [Header("Authentification")]
     public GameObject authentificationPanel;
     public InputField nickname;
@@ -26,13 +30,18 @@ public class UiManager : MonoBehaviour {
 
     public Image gaugeFilling;
 
+    [Header("Leaderboard")]
+    public GameObject leaderboardPopup;
+    public GameObject entriesParent;
+    public GameObject[] entries;
+
+    #endregion
+
     private Tween gaugeTween;
     private Tween alertTween;
 
     private Color fullOpacity;
     private Color noOpacity;
-
-    public MineFarmGameManager gameMgr;
 
     public GameObject CurrentPanel
     {
@@ -53,8 +62,6 @@ public class UiManager : MonoBehaviour {
     }
     private GameObject currentPanel;
 
-    private bool canMine = true;
-
 	void Awake () {
 
         noOpacity = fullOpacity = alertMessage.color;
@@ -65,11 +72,37 @@ public class UiManager : MonoBehaviour {
         currentPanel = authentificationPanel;
     }
 
+    #region Authentification components
+
     public bool CheckAuthentificationForm()
     {
         return !(password.text.Equals("") || nickname.text.Equals(""));
     }
-    
+
+
+    public void DisplayAlert(string message)
+    {
+        CancelInvoke("Disappear");
+
+        if (alertTween != null && alertTween.IsPlaying())
+        {
+            alertTween.Kill();
+        }
+
+        alertMessage.text = message;
+        alertMessage.color = fullOpacity;
+        Invoke("Disappear", 2f);
+    }
+
+    private void Disappear()
+    {
+        alertTween = alertMessage.DOColor(noOpacity, 1f);
+    }
+
+    #endregion
+
+    #region Game components
+
     public void UpdateInventory()
     {
         goldText.text = gameMgr.UserData.gold.ToString();
@@ -84,18 +117,27 @@ public class UiManager : MonoBehaviour {
         //TriggerGauge((float) diff.TotalSeconds);
     }
 
-    // DO a juicy animation !
     public void DisplayReward(int goldMined, int diamondMined)
     {
         UpdateInventory();
 
         // Restart gauge time.
-        TriggerGauge(5f, true);
+        TriggerGauge(gameMgr.mineCooldown, true);
     }
 
     public void ShakeRock()
     {
         rock.transform.DOShakePosition(0.75f, 100, 50);
+    }
+
+    public void FeedbackCantMine()
+    {
+        rock.DOColor(Color.red, 0.25f).OnComplete(ResetRockColor);
+    }
+
+    private void ResetRockColor()
+    {
+        rock.color = Color.white;
     }
 
     private void TriggerGauge(float remindTime, bool force = false)
@@ -110,29 +152,16 @@ public class UiManager : MonoBehaviour {
             gaugeFilling.fillAmount = 0f;
             gaugeTween = gaugeFilling.DOFillAmount(1f, remindTime).SetEase(Ease.Linear);
         }
-
-        else
-        {
-            // Feedback 
-        }
     }
 
-    public void DisplayAlert(string message)
+    #endregion
+
+    #region Leaderboard components
+
+    public void DisplayLeaderboard(bool displayed)
     {
-        CancelInvoke("Disappear");
-
-        if(alertTween != null && alertTween.IsPlaying())
-        {
-            alertTween.Kill();
-        }
-
-        alertMessage.text = message;
-        alertMessage.color = fullOpacity;
-        Invoke("Disappear", 1f);
+        leaderboardPopup.SetActive(displayed);
     }
 
-    private void Disappear()
-    {
-        alertTween = alertMessage.DOColor(noOpacity, 1f);
-    }
+    #endregion
 }
