@@ -131,7 +131,30 @@ public class MineFarmAPIClient : MonoBehaviour {
             gameMgr.DisplayGamePanel();
         }
     }
-    
+
+    public IEnumerator BuyRock()
+    {
+        UnityWebRequest www = UnityWebRequest.Put(url + "/api/Gameplay/Shop/Rock/" + currentSession.userId, "Try to buy a rock");
+        AddRequestHeaders(www);
+
+        yield return www.SendWebRequest();
+
+        Debug.Log(www.url);
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+
+        else
+        {
+            gameMgr.UnlockRock();
+
+            // Refresh inventory.
+            StartCoroutine(RetrieveInventory());
+        }
+    }
+
     /// <summary>
     /// Retrieve the inventory of the player when he connects to the game.
     /// </summary>
@@ -140,8 +163,6 @@ public class MineFarmAPIClient : MonoBehaviour {
     {
         UnityWebRequest www = UnityWebRequest.Get(url + "/api/Gameplay/" + currentSession.userId);
         AddRequestHeaders(www);
-
-        Debug.Log(www.url);
 
         yield return www.SendWebRequest();
 
@@ -169,12 +190,12 @@ public class MineFarmAPIClient : MonoBehaviour {
     {
         if(!gameMgr.CanMineRock(rockIndex))
         {
-            gameMgr.uiMgr.FeedbackCantMine();
+            gameMgr.uiMgr.rocks[rockIndex].FeedbackCantMine();
             yield break;
         }
 
         // USE http://localhost.fiddler:80/api/Gameplay/Farm/ to observe the request in details. Remove to reduce latency !!!
-        UnityWebRequest www = UnityWebRequest.Put(url+"/api/Gameplay/Farm/" + currentSession.userId, "empty body");
+        UnityWebRequest www = UnityWebRequest.Put(url+"/api/Gameplay/Farm/" + currentSession.userId +"/" + rockIndex, "Try to mine");
         
         AddRequestHeaders(www);
         // Add token to request header.
@@ -182,6 +203,8 @@ public class MineFarmAPIClient : MonoBehaviour {
 
         yield return www.SendWebRequest();
         
+        Debug.Log(www.url);
+
         // Handle error or button pressed to fast !
         if (www.isNetworkError || www.isHttpError)
         {
@@ -201,9 +224,9 @@ public class MineFarmAPIClient : MonoBehaviour {
         {
             Debug.Log("Status code : " + www.responseCode + "\n" + www.downloadHandler.text);
 
-            int mineId = int.Parse(www.downloadHandler.text);
+            RewardData reward = RewardData.CreateFromJSON(www.downloadHandler.text);
             
-            gameMgr.Mine(rockIndex, mineId);
+            gameMgr.Mine(rockIndex, reward);
         }
     }
 

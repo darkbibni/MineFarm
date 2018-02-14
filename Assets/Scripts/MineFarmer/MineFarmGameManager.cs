@@ -10,9 +10,12 @@ public class MineFarmGameManager : MonoBehaviour {
     [Header("Mine parameters")]
     public float mineCooldown = 2.5f;
 
-    [Header("Sfx")]
+    [Header("Vfx")]
     public ParticleSystem goldVfx;
     public ParticleSystem diamondVfx;
+    public ParticleSystem amethystVfx;
+
+    // TODO VFX !!!
     
     public UserData UserData
     {
@@ -20,23 +23,54 @@ public class MineFarmGameManager : MonoBehaviour {
         set
         {
             userData = value;
-            uiMgr.UpdateInventory();
+
+            // Display rocks unlocked.
+            SetupRocks();
+
+            uiMgr.RefreshUI();
         }
     }
     private UserData userData;
     
-    // TODO add rock unlocked.
+    // TODO Unlock rock depending player data.
     private bool[] canMine;
 
     private void Awake()
     {
-        int nbOfRocks = 1;
+        int nbOfRocks = 7; // Get rock data.
+
         canMine = new bool[nbOfRocks];
 
         for (int i = 0; i < canMine.Length; i++)
         {
             canMine[i] = true;
         }
+    }
+
+    private void SetupRocks()
+    {
+        for (int i = 0; i < uiMgr.rocks.Length; i++)
+        {
+            if(i <= userData.rockBought)
+            {
+                uiMgr.rocks[i].gameObject.SetActive(true);
+                uiMgr.hammers[i].gameObject.SetActive(true);
+            }
+
+            else
+            {
+                uiMgr.rocks[i].gameObject.SetActive(false);
+                uiMgr.hammers[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void UnlockRock()
+    {
+        userData.rockBought++;
+        
+        uiMgr.rocks[userData.rockBought].gameObject.SetActive(true);
+        uiMgr.hammers[userData.rockBought].gameObject.SetActive(true);
     }
 
     // TODO Do it with a rock index.
@@ -49,30 +83,25 @@ public class MineFarmGameManager : MonoBehaviour {
         canMine[rockIndex] = true;
     }
 
-
     /// <summary>
     /// Manager mine reward.
     /// </summary>
     /// <param name="mineId"></param>
-    public void Mine(int rockIndex, int mineId)
+    public void Mine(int rockIndex, RewardData rewardData)
     {
         // Prevent to mine the same rock.
         canMine[rockIndex] = false;
 
         // Run cooldown.
-        StartCoroutine(CooldownMining(0));
+        StartCoroutine(CooldownMining(rockIndex));
 
         // Feedback mining.
-        uiMgr.ShakeRock();
+        uiMgr.rocks[rockIndex].ShakeRock();
 
-        // Get the reward.
-        switch (mineId)
-        {
-            case 0: UpdateUser(1, 0); break;
-            case 1: UpdateUser(0, 1); break;
-            case 2: UpdateUser(5, 1); break;
-            case 3: UpdateUser(50, 10); break;
-        }
+        uiMgr.hammers[rockIndex].TriggerGauge(mineCooldown, true);
+
+        // Display the reward.
+        MineEffect(rewardData.goldObtained, rewardData.diamondObtained, rewardData.amethystObtained);
     }
     
     /// <summary>
@@ -86,19 +115,21 @@ public class MineFarmGameManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Update the user data with a juicy animation.
+    /// Trigger the mine effect. Reveal the reward and refresh inventory.
     /// </summary>
     /// <param name="goldMined"></param>
     /// <param name="diamondMined"></param>
-    public void UpdateUser(int goldMined, int diamondMined)
+    public void MineEffect(int goldMined, int diamondMined, int amethystMined)
     {
         userData.gold += goldMined;
         userData.diamond += diamondMined;
+        userData.amethyst += amethystMined;
 
         goldVfx.Emit(goldMined);
         diamondVfx.Emit(diamondMined);
+        amethystVfx.Emit(amethystMined);
 
-        uiMgr.DisplayReward(goldMined, diamondMined);
+        uiMgr.RefreshUI();
     }
     
     public void DisplayGamePanel()

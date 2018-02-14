@@ -25,10 +25,9 @@ public class UiManager : MonoBehaviour {
     public Text goldText;
     public Text diamondText;
     public Text amethystText;
-
-    public Image rock;
-
-    public Image gaugeFilling;
+    
+    public Hammer[] hammers;
+    public Rock[] rocks;
 
     [Header("Leaderboard")]
     public GameObject leaderboardPopup;
@@ -36,11 +35,14 @@ public class UiManager : MonoBehaviour {
     public GameObject entriesParent;
     public Text[] entries;
 
+    [Header("Shop")]
+    public GameObject shopPopup;
+
     #endregion
 
-    private Tween gaugeTween;
     private Tween alertTween;
 
+    // Opacity of the alert message.
     private Color fullOpacity;
     private Color noOpacity;
 
@@ -58,12 +60,38 @@ public class UiManager : MonoBehaviour {
             }
 
             currentPanel = value;
-            currentPanel.SetActive(true);
+            if(currentPanel)
+            {
+                currentPanel.SetActive(true);
+            }
         }
     }
     private GameObject currentPanel;
 
-	void Awake () {
+    public GameObject CurrentPopup
+    {
+        get
+        {
+            return currentPopup;
+        }
+        set
+        {
+            if (currentPopup != null)
+            {
+                currentPopup.SetActive(false);
+            }
+
+            currentPopup = value;
+
+            if (currentPopup)
+            {
+                currentPopup.SetActive(true);
+            }
+        }
+    }
+    private GameObject currentPopup;
+
+    void Awake () {
 
         noOpacity = fullOpacity = alertMessage.color;
         noOpacity.a = 0f;
@@ -72,6 +100,7 @@ public class UiManager : MonoBehaviour {
         // Default panel.
         currentPanel = authentificationPanel;
 
+        // Restore nickname.
         string nicknameSaved = PlayerPrefs.GetString("Nickname");
         nickname.text = nicknameSaved;
     }
@@ -107,10 +136,11 @@ public class UiManager : MonoBehaviour {
 
     #region Game components
 
-    public void UpdateInventory()
+    public void RefreshUI()
     {
         goldText.text = gameMgr.UserData.gold.ToString();
         diamondText.text = gameMgr.UserData.diamond.ToString();
+        amethystText.text = gameMgr.UserData.amethyst.ToString();
 
         // TODO DEBUG TIME RECEIVED ! Then check remind time. Trigger animation.
         // Debug.Log(user.lastTimeMined);
@@ -121,56 +151,9 @@ public class UiManager : MonoBehaviour {
         //TriggerGauge((float) diff.TotalSeconds);
     }
 
-    public void DisplayReward(int goldMined, int diamondMined)
-    {
-        UpdateInventory();
-
-        // Restart gauge time.
-        TriggerGauge(gameMgr.mineCooldown, true);
-    }
-
-    public void ShakeRock()
-    {
-        rock.transform.DOShakePosition(0.75f, 100, 50).OnComplete(ResetRockPosition);
-    }
-
-    private void ResetRockPosition()
-    {
-        rock.transform.localPosition = Vector3.zero;
-    }
-
-    public void FeedbackCantMine()
-    {
-        rock.DOColor(Color.red, 0.25f).OnComplete(ResetRockColor);
-    }
-
-    private void ResetRockColor()
-    {
-        rock.color = Color.white;
-    }
-
-    private void TriggerGauge(float remindTime, bool force = false)
-    {
-        if(force)
-        {
-            gaugeTween.Kill();
-        }
-
-        if(gaugeTween == null || !gaugeTween.IsPlaying())
-        {
-            gaugeFilling.fillAmount = 0f;
-            gaugeTween = gaugeFilling.DOFillAmount(1f, remindTime).SetEase(Ease.Linear);
-        }
-    }
-
     #endregion
 
     #region Leaderboard components
-
-    public void DisplayLeaderboard(bool displayed)
-    {
-        leaderboardPopup.SetActive(displayed);
-    }
 
     // TODO calculate place depending exaequo.
 
@@ -205,7 +188,7 @@ public class UiManager : MonoBehaviour {
 
             case ResourceType.DIAMOND: amount = user.diamond; break;
 
-            case ResourceType.AMEHTYST: amount = 0; break;// TODO change that !
+            case ResourceType.AMEHTYST: amount = user.amethyst; break;
 
             default: amount = 0; break;
         }

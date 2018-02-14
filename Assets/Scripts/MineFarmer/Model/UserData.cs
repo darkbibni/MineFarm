@@ -6,8 +6,15 @@ public class UserData {
 
     public string id;
     public string name;
+
     public int gold;
     public int diamond;
+    public int amethyst;
+
+    public int rockBought;
+    public int lastAutoFarmIndex;
+    public int lastOfflineFarmIndex;
+
     public DateTime lastTimeMined;
 
     public static UserData CreateFromJSON(string jsonString)
@@ -23,5 +30,4 @@ public class UserData {
     {
         return "["+id+"]" + " " + name + " " + gold + " golds - " + diamond + " diamonds.";
     }
-    
 }
