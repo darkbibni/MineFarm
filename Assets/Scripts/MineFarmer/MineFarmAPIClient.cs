@@ -21,7 +21,7 @@ public class MineFarmAPIClient : MonoBehaviour {
 
     [Header("Web API configuration")]
     [Tooltip("Url of the web api server (needs the port)")]
-    public string uri = "http://localhost:80";
+    public string url = "http://10.51.0.52:8022"; // Use localhost else.
 
     private UserSession currentSession;
     
@@ -51,9 +51,9 @@ public class MineFarmAPIClient : MonoBehaviour {
     public IEnumerator TryToRegister(string nickname, string password)
     {
         string passwordJson = "\"" + password + "\"";
-        UnityWebRequest www = UnityWebRequest.Put(uri +"/api/User/" + nickname, passwordJson);
+        UnityWebRequest www = UnityWebRequest.Put(url +"/api/User/" + nickname, passwordJson);
 
-        Request request = new Request("PUT", uri + "/api/User/" + nickname);
+        Request request = new Request("PUT", url + "/api/User/" + nickname);
         request.Text = passwordJson;
 
         AddRequestHeaders(www);
@@ -90,7 +90,7 @@ public class MineFarmAPIClient : MonoBehaviour {
         string passwordJson = "\"" + password + "\"";
 
         // UnityWebRequest encode the body so ... we use that custom Http Request script.
-        Request www = new Request("POST", uri + "/api/User/" + nickname)
+        Request www = new Request("POST", url + "/api/User/" + nickname)
         {
             Text = passwordJson
         };
@@ -138,8 +138,10 @@ public class MineFarmAPIClient : MonoBehaviour {
     /// <returns></returns>
     public IEnumerator RetrieveInventory()
     {
-        UnityWebRequest www = UnityWebRequest.Get(uri + "/api/Gameplay/" + currentSession.userId);
+        UnityWebRequest www = UnityWebRequest.Get(url + "/api/Gameplay/" + currentSession.userId);
         AddRequestHeaders(www);
+
+        Debug.Log(www.url);
 
         yield return www.SendWebRequest();
 
@@ -172,7 +174,7 @@ public class MineFarmAPIClient : MonoBehaviour {
         }
 
         // USE http://localhost.fiddler:80/api/Gameplay/Farm/ to observe the request in details. Remove to reduce latency !!!
-        UnityWebRequest www = UnityWebRequest.Put(uri+"/api/Gameplay/Farm/" + currentSession.userId, "empty body");
+        UnityWebRequest www = UnityWebRequest.Put(url+"/api/Gameplay/Farm/" + currentSession.userId, "empty body");
         
         AddRequestHeaders(www);
         // Add token to request header.
@@ -202,6 +204,31 @@ public class MineFarmAPIClient : MonoBehaviour {
             int mineId = int.Parse(www.downloadHandler.text);
             
             gameMgr.Mine(rockIndex, mineId);
+        }
+    }
+
+    public IEnumerator GetLeaderboard(ResourceType resource)
+    {
+        UnityWebRequest www = UnityWebRequest.Get(url + "/api/Gameplay/Top/" + ResourceUtility.GetName(resource));
+        AddRequestHeaders(www);
+
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+
+        else
+        {
+            string json = www.downloadHandler.text;
+
+            // Create user info from json.
+            UserData[] top = JsonHelper.getJsonArray<UserData>(json);
+
+            Debug.Log("Status code : " + www.responseCode + "\n" + json);
+            
+            gameMgr.uiMgr.UpdateLeaderboard(resource, top);
         }
     }
 

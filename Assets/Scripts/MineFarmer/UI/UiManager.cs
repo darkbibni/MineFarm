@@ -19,7 +19,6 @@ public class UiManager : MonoBehaviour {
     public InputField password;
     public Text alertMessage;
     
-    // TODO separate scenes.
     [Header("Game")]
     public GameObject gamePanel;
     public Text goldText;
@@ -32,8 +31,9 @@ public class UiManager : MonoBehaviour {
 
     [Header("Leaderboard")]
     public GameObject leaderboardPopup;
+    public Text leaderboardTitle;
     public GameObject entriesParent;
-    public GameObject[] entries;
+    public Text[] entries;
 
     #endregion
 
@@ -127,7 +127,12 @@ public class UiManager : MonoBehaviour {
 
     public void ShakeRock()
     {
-        rock.transform.DOShakePosition(0.75f, 100, 50);
+        rock.transform.DOShakePosition(0.75f, 100, 50).OnComplete(ResetRockPosition);
+    }
+
+    private void ResetRockPosition()
+    {
+        rock.transform.localPosition = Vector3.zero;
     }
 
     public void FeedbackCantMine()
@@ -161,6 +166,47 @@ public class UiManager : MonoBehaviour {
     public void DisplayLeaderboard(bool displayed)
     {
         leaderboardPopup.SetActive(displayed);
+    }
+
+    // TODO calculate place depending exaequo.
+
+    public void UpdateLeaderboard(ResourceType resource, UserData[] top)
+    {
+        string resourceName = ResourceUtility.GetName(resource);
+
+        leaderboardTitle.text = "TOP 10 - " + resourceName;
+
+        for (int i = 0; i < entries.Length; i++)
+        {
+            if(i < top.Length)
+            {
+                entries[i].gameObject.SetActive(true);
+                entries[i].text = "[" + (i + 1) + "] " + top[i].name + " : " + GetResource(resource, top[i]) + " " + resourceName + "s";
+            }
+
+            else
+            {
+                entries[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private int GetResource(ResourceType resource, UserData user)
+    {
+        int amount = 0;
+
+        switch (resource)
+        {
+            case ResourceType.GOLD: amount = user.gold; break;
+
+            case ResourceType.DIAMOND: amount = user.diamond; break;
+
+            case ResourceType.AMEHTYST: amount = 0; break;// TODO change that !
+
+            default: amount = 0; break;
+        }
+
+        return amount;
     }
 
     #endregion

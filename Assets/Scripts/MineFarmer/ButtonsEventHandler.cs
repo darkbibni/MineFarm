@@ -67,9 +67,35 @@ public class ButtonsEventHandler : MonoBehaviour {
         }
     }
 
-    public void LeaderboardButtonEvent()
+    public void ToggleLeaderboardEvent()
     {
         uiMgr.DisplayLeaderboard(true);
+
+        // TODO Feedback loading...
+
+        RefreshLeaderboard(ResourceType.GOLD);
+    }
+
+    public void LeaderboardGoldButtonEvent()
+    {
+        RefreshLeaderboard(ResourceType.GOLD);
+    }
+
+    public void LeaderboardDiamondButtonEvent()
+    {
+        RefreshLeaderboard(ResourceType.DIAMOND);
+    }
+
+    public void LeaderboardAmethystButtonEvent()
+    {
+        RefreshLeaderboard(ResourceType.AMEHTYST);
+    }
+
+    public void RefreshLeaderboard(ResourceType resource)
+    {
+        // TODO cooldown to prevent to refresh too many times !
+
+        api.StartCoroutine(api.GetLeaderboard(resource));
     }
 
     public void BackLbButtonEvent()

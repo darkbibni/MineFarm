@@ -52,4 +52,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameMgr: {fileID: 0}
-  uri: http://localhost:80
+  url: http://10.51.0.52:8022
