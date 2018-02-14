@@ -37,6 +37,10 @@ public class UiManager : MonoBehaviour {
 
     [Header("Shop")]
     public GameObject shopPopup;
+    public ShopItem[] rocksToBuy;
+    public Sprite rockLocked;
+    public Color itemBoughtColor;
+    public Color itemLockColor;
 
     #endregion
 
@@ -138,9 +142,24 @@ public class UiManager : MonoBehaviour {
 
     public void RefreshUI()
     {
+        // Refresh inventory.
         goldText.text = gameMgr.UserData.gold.ToString();
         diamondText.text = gameMgr.UserData.diamond.ToString();
         amethystText.text = gameMgr.UserData.amethyst.ToString();
+
+        // Refresh shop.
+        for (int i = 0; i < rocksToBuy.Length; i++)
+        {
+            if(i <= gameMgr.UserData.rockBought)
+            {
+                rocksToBuy[i].FeedbackBought();
+            }
+
+            if(i > gameMgr.UserData.rockBought+1)
+            {
+                rocksToBuy[i].FeedbackLocked();
+            }
+        }
 
         // TODO DEBUG TIME RECEIVED ! Then check remind time. Trigger animation.
         // Debug.Log(user.lastTimeMined);
@@ -149,6 +168,22 @@ public class UiManager : MonoBehaviour {
         //Debug.Log(diff.TotalSeconds);
 
         //TriggerGauge((float) diff.TotalSeconds);
+    }
+
+    /// <summary>
+    /// Lock the specified item of the specified category.
+    /// </summary>
+    /// <param name="catergoryId"></param>
+    /// <param name="itemId"></param>
+    public void BuyShopitem(int catergoryId, int itemId)
+    {
+        switch(catergoryId)
+        {
+            case 0: rocksToBuy[itemId].FeedbackBought(); break;
+            case 1: break;
+            case 2: break;
+            default: break;
+        }
     }
 
     #endregion
@@ -197,4 +232,28 @@ public class UiManager : MonoBehaviour {
     }
 
     #endregion
+
+
+    [ContextMenu("Fake shop")]
+    public void FakeShop()
+    {
+        UserData data = new UserData()
+        {
+            rockBought = 3, // Has buy 3 rocks.
+        };
+
+        // Refresh shop.
+        for (int i = 0; i < rocksToBuy.Length; i++)
+        {
+            if (i <= data.rockBought-1)
+            {
+                rocksToBuy[i].FeedbackBought();
+            }
+
+            if (i > data.rockBought)
+            {
+                rocksToBuy[i].FeedbackLocked();
+            }
+        }
+    }
 }

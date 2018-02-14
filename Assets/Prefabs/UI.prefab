@@ -106,8 +106,9 @@ GameObject:
   - component: {fileID: 224789282458665276}
   - component: {fileID: 222599633851450822}
   - component: {fileID: 114409936230486542}
+  - component: {fileID: 114317061154630368}
   m_Layer: 5
-  m_Name: Cell2
+  m_Name: ShopItem2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -223,7 +224,7 @@ GameObject:
   - component: {fileID: 222604669672661406}
   - component: {fileID: 114781166096958624}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Price
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -734,8 +735,9 @@ GameObject:
   - component: {fileID: 224114392212715896}
   - component: {fileID: 222732885373818676}
   - component: {fileID: 114777560373057012}
+  - component: {fileID: 114512749589530988}
   m_Layer: 5
-  m_Name: Cell3
+  m_Name: ShopItem3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -751,8 +753,9 @@ GameObject:
   - component: {fileID: 224246776513354904}
   - component: {fileID: 222054027961500040}
   - component: {fileID: 114395168284717182}
+  - component: {fileID: 114194165065193656}
   m_Layer: 5
-  m_Name: Cell6
+  m_Name: ShopItem6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -873,8 +876,9 @@ GameObject:
   - component: {fileID: 224769614969228484}
   - component: {fileID: 222718534678457976}
   - component: {fileID: 114195705421835476}
+  - component: {fileID: 114331738063669832}
   m_Layer: 5
-  m_Name: Cell4
+  m_Name: ShopItem4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -890,8 +894,9 @@ GameObject:
   - component: {fileID: 224914153803519626}
   - component: {fileID: 222794296886273244}
   - component: {fileID: 114770704959531844}
+  - component: {fileID: 114925601377407668}
   m_Layer: 5
-  m_Name: Cell5
+  m_Name: ShopItem5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2076,7 +2081,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1868780703866756
 GameObject:
   m_ObjectHideFlags: 1
@@ -2270,8 +2275,9 @@ GameObject:
   - component: {fileID: 224766600564793256}
   - component: {fileID: 222419957318408608}
   - component: {fileID: 114600826641027346}
+  - component: {fileID: 114760090263529270}
   m_Layer: 5
-  m_Name: Cell1
+  m_Name: ShopItem1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2739,7 +2745,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -3084,8 +3090,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 4
-    m_SelectOnUp: {fileID: 114705085399758116}
-    m_SelectOnDown: {fileID: 114853178340864346}
+    m_SelectOnUp: {fileID: 114853178340864346}
+    m_SelectOnDown: {fileID: 114705085399758116}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -3352,7 +3358,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -3382,6 +3388,21 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114194165065193656
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1356107125121962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c6e178faced6cb468b184dd1b7ef570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ui: {fileID: 114522219837700750}
+  buttonImage: {fileID: 114790656469933522}
+  rockImage: {fileID: 114905544018444966}
+  button: {fileID: 114201774241350690}
 --- !u!114 &114195705421835476
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3483,7 +3504,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -4051,6 +4072,21 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114317061154630368
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1043290650515982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c6e178faced6cb468b184dd1b7ef570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ui: {fileID: 114522219837700750}
+  buttonImage: {fileID: 114096285113242146}
+  rockImage: {fileID: 114914387170486258}
+  button: {fileID: 114488001348856430}
 --- !u!114 &114317794828224434
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4104,6 +4140,21 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114331738063669832
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1397319683859078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c6e178faced6cb468b184dd1b7ef570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ui: {fileID: 114522219837700750}
+  buttonImage: {fileID: 114310083360107970}
+  rockImage: {fileID: 114485439959428568}
+  button: {fileID: 114054008445516142}
 --- !u!114 &114337406811860812
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4913,7 +4964,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -5115,6 +5166,21 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114512749589530988
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1343673889443118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c6e178faced6cb468b184dd1b7ef570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ui: {fileID: 114522219837700750}
+  buttonImage: {fileID: 114752876079066788}
+  rockImage: {fileID: 114842539469828748}
+  button: {fileID: 114190304155879114}
 --- !u!114 &114522081513410956
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5200,6 +5266,16 @@ MonoBehaviour:
   - {fileID: 114615689108056024}
   - {fileID: 114834305866704102}
   shopPopup: {fileID: 1868322086908702}
+  rocksToBuy:
+  - {fileID: 114760090263529270}
+  - {fileID: 114317061154630368}
+  - {fileID: 114512749589530988}
+  - {fileID: 114331738063669832}
+  - {fileID: 114925601377407668}
+  - {fileID: 114194165065193656}
+  rockLocked: {fileID: 21300000, guid: a1e34595020d74041b4e1ffa0c3cf22e, type: 3}
+  itemBoughtColor: {r: 0, g: 0.86764705, b: 0, a: 0.322}
+  itemLockColor: {r: 0.15686275, g: 0.15686275, b: 0.15686275, a: 0.5882353}
 --- !u!114 &114524952848567268
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5524,7 +5600,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -5626,14 +5702,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.4044118, b: 0.4044118, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300726, guid: 5c71058d44d474246b2dec87fe0a96be, type: 3}
+  m_Sprite: {fileID: 21300686, guid: 5c71058d44d474246b2dec87fe0a96be, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -5912,7 +5988,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300426, guid: 5c71058d44d474246b2dec87fe0a96be, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ccd585bebc190204d8f6a1438cb9eac4, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -6578,6 +6654,21 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114760090263529270
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1979753562116360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c6e178faced6cb468b184dd1b7ef570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ui: {fileID: 114522219837700750}
+  buttonImage: {fileID: 114476207147504386}
+  rockImage: {fileID: 114170408788280038}
+  button: {fileID: 114905600456927478}
 --- !u!114 &114762256996704018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7252,7 +7343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7073024, g: 0.42647058, b: 1, a: 0.25}
+  m_Color: {r: 0.7073024, g: 0.42647058, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -7329,7 +7420,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 0.6985294, g: 0.6985294, b: 0.6985294, a: 1}
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 1, g: 0.5586207, b: 0, a: 1}
+    m_PressedColor: {r: 1, g: 0.25735295, b: 0.25735295, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -7409,7 +7500,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -7421,7 +7512,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 114476207147504386}
   m_OnClick:
     m_PersistentCalls:
@@ -7466,6 +7557,21 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114925601377407668
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1400614212304106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c6e178faced6cb468b184dd1b7ef570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ui: {fileID: 114522219837700750}
+  buttonImage: {fileID: 114702214163768066}
+  rockImage: {fileID: 114458994609883872}
+  button: {fileID: 114552689347407206}
 --- !u!114 &114931344162080824
 MonoBehaviour:
   m_ObjectHideFlags: 1
