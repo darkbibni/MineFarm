@@ -30,6 +30,12 @@ public class ButtonsEventHandler : MonoBehaviour {
     {
         if (uiMgr.CheckAuthentificationForm())
         {
+            // Save nickname if player has check the 
+            if (uiMgr.keepNickname.isOn)
+            {
+                PlayerPrefs.SetString("Nickname", uiMgr.nickname.text);
+            }
+
             var t = api.TryToConnect(uiMgr.nickname.text, uiMgr.password.text);
         }
 

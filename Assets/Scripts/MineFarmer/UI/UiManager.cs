@@ -17,6 +17,7 @@ public class UiManager : MonoBehaviour {
     public GameObject authentificationPanel;
     public InputField nickname;
     public InputField password;
+    public Toggle keepNickname;
     public Text alertMessage;
     
     [Header("Game")]
@@ -70,6 +71,9 @@ public class UiManager : MonoBehaviour {
 
         // Default panel.
         currentPanel = authentificationPanel;
+
+        string nicknameSaved = PlayerPrefs.GetString("Nickname");
+        nickname.text = nicknameSaved;
     }
 
     #region Authentification components
