@@ -18,7 +18,7 @@ public class UiManager : MonoBehaviour {
     public InputField nickname;
     public InputField password;
     public Toggle keepNickname;
-    public Text alertMessage;
+    public Text mainMenuFeedback;
     
     [Header("Game")]
     public GameObject gamePanel;
@@ -40,7 +40,9 @@ public class UiManager : MonoBehaviour {
     public ShopItem[] rocksToBuy;
     public Sprite rockLocked;
     public Color itemBoughtColor;
-    public Color itemLockColor;
+    public Color itemBuyable;
+    public Color itemLockedColor;
+    public Text shopFeedback;
 
     #endregion
 
@@ -97,7 +99,7 @@ public class UiManager : MonoBehaviour {
 
     void Awake () {
 
-        noOpacity = fullOpacity = alertMessage.color;
+        noOpacity = fullOpacity = mainMenuFeedback.color;
         noOpacity.a = 0f;
         fullOpacity.a = 1f;
 
@@ -107,6 +109,18 @@ public class UiManager : MonoBehaviour {
         // Restore nickname.
         string nicknameSaved = PlayerPrefs.GetString("Nickname");
         nickname.text = nicknameSaved;
+
+        // Setup the prices in the shop.
+        SetupShop();
+    }
+
+    private void SetupShop()
+    {
+        for (int i = 0; i < rocksToBuy.Length; i++)
+        {
+            rocksToBuy[i].price.text = (250 * (i + 1) * (i + 1)).ToString();
+            rocksToBuy[i].StoreOriginalSprite();
+        }
     }
 
     #region Authentification components
@@ -114,26 +128,6 @@ public class UiManager : MonoBehaviour {
     public bool CheckAuthentificationForm()
     {
         return !(password.text.Equals("") || nickname.text.Equals(""));
-    }
-
-
-    public void DisplayAlert(string message)
-    {
-        CancelInvoke("Disappear");
-
-        if (alertTween != null && alertTween.IsPlaying())
-        {
-            alertTween.Kill();
-        }
-
-        alertMessage.text = message;
-        alertMessage.color = fullOpacity;
-        Invoke("Disappear", 2f);
-    }
-
-    private void Disappear()
-    {
-        alertTween = alertMessage.DOColor(noOpacity, 1f);
     }
 
     #endregion
@@ -147,15 +141,20 @@ public class UiManager : MonoBehaviour {
         diamondText.text = gameMgr.UserData.diamond.ToString();
         amethystText.text = gameMgr.UserData.amethyst.ToString();
 
-        // Refresh shop.
+        // Refresh shop (Feedback buy / locked).
         for (int i = 0; i < rocksToBuy.Length; i++)
         {
-            if(i <= gameMgr.UserData.rockBought)
+            if(i < gameMgr.UserData.rockBought)
             {
                 rocksToBuy[i].FeedbackBought();
             }
 
-            if(i > gameMgr.UserData.rockBought+1)
+            else if(i == gameMgr.UserData.rockBought)
+            {
+                rocksToBuy[i].FeedbackBuyable();
+            }
+
+            else if(i > gameMgr.UserData.rockBought)
             {
                 rocksToBuy[i].FeedbackLocked();
             }
@@ -179,9 +178,24 @@ public class UiManager : MonoBehaviour {
     {
         switch(catergoryId)
         {
-            case 0: rocksToBuy[itemId].FeedbackBought(); break;
-            case 1: break;
-            case 2: break;
+            case 0:
+                rocksToBuy[itemId].FeedbackBought();
+
+                // Buy a rock unlock the new tier.
+                if(itemId+1 < rocksToBuy.Length)
+                {
+                    rocksToBuy[itemId+1].FeedbackBuyable();
+                }
+
+                break;
+
+            case 1:
+
+                break;
+
+            case 2:
+
+                break;
             default: break;
         }
     }
@@ -233,6 +247,38 @@ public class UiManager : MonoBehaviour {
 
     #endregion
 
+    #region Feedback management
+
+    public void MainMenuFeedback(string message)
+    {
+        DisplayAlert(mainMenuFeedback, message);
+    }
+
+    public void ShopFeedback(string message)
+    {
+        DisplayAlert(shopFeedback, message);
+    }
+
+    private void DisplayAlert(Text textToUpdate, string message)
+    {
+        CancelInvoke("Disappear");
+
+        if (alertTween != null && alertTween.IsPlaying())
+        {
+            alertTween.Kill();
+        }
+
+        textToUpdate.text = message;
+        textToUpdate.color = fullOpacity;
+        Invoke("Disappear", 2f);
+    }
+    
+    private void Disappear()
+    {
+        alertTween = mainMenuFeedback.DOColor(noOpacity, 1f);
+    }
+
+    #endregion
 
     [ContextMenu("Fake shop")]
     public void FakeShop()

@@ -8,12 +8,13 @@ public class MineFarmGameManager : MonoBehaviour {
     public UiManager uiMgr;
 
     [Header("Mine parameters")]
-    public float mineCooldown = 2.5f;
+    public float[] cooldowns;
 
     [Header("Vfx")]
-    public ParticleSystem goldVfx;
-    public ParticleSystem diamondVfx;
-    public ParticleSystem amethystVfx;
+    public Transform vfxParent;
+    public ParticleSystem[] goldVfx;
+    public ParticleSystem[] diamondVfx;
+    public ParticleSystem[] amethystVfx;
 
     // TODO VFX !!!
     
@@ -78,7 +79,7 @@ public class MineFarmGameManager : MonoBehaviour {
     {
         canMine[rockIndex] = false;
 
-        yield return new WaitForSecondsRealtime(mineCooldown);
+        yield return new WaitForSecondsRealtime(cooldowns[rockIndex]);
 
         canMine[rockIndex] = true;
     }
@@ -98,10 +99,11 @@ public class MineFarmGameManager : MonoBehaviour {
         // Feedback mining.
         uiMgr.rocks[rockIndex].ShakeRock();
 
-        uiMgr.hammers[rockIndex].TriggerGauge(mineCooldown, true);
+        // Run gauge.
+        uiMgr.hammers[rockIndex].TriggerGauge(cooldowns[rockIndex], true);
 
-        // Display the reward.
-        MineEffect(rewardData.goldObtained, rewardData.diamondObtained, rewardData.amethystObtained);
+        // Display the reward of the specified rock.
+        MineEffect(rockIndex, rewardData.goldObtained, rewardData.diamondObtained, rewardData.amethystObtained);
     }
     
     /// <summary>
@@ -119,15 +121,28 @@ public class MineFarmGameManager : MonoBehaviour {
     /// </summary>
     /// <param name="goldMined"></param>
     /// <param name="diamondMined"></param>
-    public void MineEffect(int goldMined, int diamondMined, int amethystMined)
+    public void MineEffect(int rockId, int goldMined, int diamondMined, int amethystMined)
     {
         userData.gold += goldMined;
         userData.diamond += diamondMined;
         userData.amethyst += amethystMined;
 
-        goldVfx.Emit(goldMined);
-        diamondVfx.Emit(diamondMined);
-        amethystVfx.Emit(amethystMined);
+        // TODO Feedback text on inventory (+amount)
+
+        if(goldMined > 0)
+        {
+            goldVfx[rockId].Emit(goldMined);
+        }
+
+        if (diamondMined > 0)
+        {
+            diamondVfx[rockId].Emit(diamondMined);
+        }
+
+        if (amethystMined > 0)
+        {
+            amethystVfx[rockId].Emit(amethystMined);
+        }
 
         uiMgr.RefreshUI();
     }
@@ -135,10 +150,5 @@ public class MineFarmGameManager : MonoBehaviour {
     public void DisplayGamePanel()
     {
         uiMgr.CurrentPanel = uiMgr.gamePanel;
-    }
-
-    public void Feedback(string message)
-    {
-        uiMgr.DisplayAlert(message);
     }
 }

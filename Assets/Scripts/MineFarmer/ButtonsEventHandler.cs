@@ -19,7 +19,7 @@ public class ButtonsEventHandler : MonoBehaviour {
 
         else
         {
-            uiMgr.DisplayAlert("Some fields are missing !");
+            uiMgr.MainMenuFeedback("Some fields are missing !");
         }
     }
 
@@ -41,7 +41,7 @@ public class ButtonsEventHandler : MonoBehaviour {
 
         else
         {
-            uiMgr.DisplayAlert("Some fields are missing !");
+            uiMgr.MainMenuFeedback("Some fields are missing !");
         }
     }
 

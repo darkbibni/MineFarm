@@ -10,6 +10,7 @@ public class ShopItem : MonoBehaviour {
     public Image buttonImage;
     public Image rockImage;
     public Button button;
+    public Text price;
 
     private Sprite originalRockSprite;
 
@@ -20,26 +21,46 @@ public class ShopItem : MonoBehaviour {
         buttonImage = transform.GetChild(0).GetChild(0).GetComponent<Image>();
         rockImage = buttonImage.transform.GetChild(0).GetComponent<Image>();
         button = buttonImage.GetComponent<Button>();
-    }
-
-    void Awake()
-    {
-        originalRockSprite = rockImage.sprite;
+        price = transform.GetChild(1).GetComponent<Text>();
     }
 
     #endregion
 
-    public void FeedbackLocked()
+    public void StoreOriginalSprite()
     {
-        button.interactable = false;
-        rockImage.sprite = ui.rockLocked;
-        buttonImage.color = ui.itemLockColor;
+        // Keep the sprite on memory.
+        originalRockSprite = rockImage.sprite;
     }
 
+    /// <summary>
+    /// Call this when the object is locked. Unbuyable.
+    /// </summary>
+    public void FeedbackLocked()
+    {
+        // Keep the sprite on memory.
+        originalRockSprite = rockImage.sprite;
+
+        button.interactable = false;
+        rockImage.sprite = ui.rockLocked;
+        buttonImage.color = ui.itemLockedColor;
+    }
+
+    /// <summary>
+    /// Call this when the object can be buy by the player.
+    /// </summary>
+    public void FeedbackBuyable()
+    {
+        button.interactable = true;
+        rockImage.sprite = originalRockSprite;
+        buttonImage.color = ui.itemBuyable;
+    }
+
+    /// <summary>
+    /// Call this when the object is bought.
+    /// </summary>
     public void FeedbackBought()
     {
         button.interactable = false;
-        rockImage.sprite = originalRockSprite;
         buttonImage.color = ui.itemBoughtColor;
     }
 }

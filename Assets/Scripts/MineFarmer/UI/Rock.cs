@@ -16,7 +16,7 @@ public class Rock : MonoBehaviour {
         rock.transform.DOShakePosition(0.75f, 100, 50).OnComplete(ResetRockPosition);
     }
 
-    private void ResetRockPosition()
+    private void ResetRockPosition() 
     {
         rock.transform.localPosition = Vector3.zero;
     }

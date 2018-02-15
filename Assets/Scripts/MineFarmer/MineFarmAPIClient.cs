@@ -62,20 +62,20 @@ public class MineFarmAPIClient : MonoBehaviour {
 
         if (www.isNetworkError)
         {
-            gameMgr.Feedback("No network connection :(");
+            gameMgr.uiMgr.MainMenuFeedback("No network connection :(");
         }
 
         else if(www.isHttpError)
         {
-            gameMgr.Feedback(ManagerErrorCode(www.responseCode));
+            gameMgr.uiMgr.MainMenuFeedback(ManagerErrorCode(www.responseCode));
         }
 
         else
         {
-            Debug.Log("Status code : "+ www.responseCode +"\n"+ www.downloadHandler.text);
+            //Debug.Log("Status code : "+ www.responseCode +"\n"+ www.downloadHandler.text);
 
             // Feedback registration succeed !
-            gameMgr.Feedback("You are now registered !");
+            gameMgr.uiMgr.MainMenuFeedback("You are now registered !");
         }
     }
 
@@ -104,13 +104,11 @@ public class MineFarmAPIClient : MonoBehaviour {
 
         catch(Exception)
         {
-            gameMgr.Feedback("Can't connect...");
+            gameMgr.uiMgr.MainMenuFeedback("Can't connect...");
             return;
         }
 
         var response = www.response;
-
-        gameMgr.Feedback(ManagerErrorCode(response.status));
 
         if (response != null)
         {
@@ -127,11 +125,17 @@ public class MineFarmAPIClient : MonoBehaviour {
                 token = messageReceived
             };
 
-            StartCoroutine(RetrieveInventory());
+            StartCoroutine(RetrievePlayerData());
+            StartCoroutine(RetrieveServerData());
+
             gameMgr.DisplayGamePanel();
         }
     }
 
+    /// <summary>
+    /// Try to buy a rock.
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator BuyRock()
     {
         UnityWebRequest www = UnityWebRequest.Put(url + "/api/Gameplay/Shop/Rock/" + currentSession.userId, "Try to buy a rock");
@@ -139,11 +143,14 @@ public class MineFarmAPIClient : MonoBehaviour {
 
         yield return www.SendWebRequest();
 
-        Debug.Log(www.url);
-
-        if (www.isNetworkError || www.isHttpError)
+        if (www.isNetworkError)
         {
-            Debug.Log(www.error);
+            gameMgr.uiMgr.ShopFeedback("Network error D:");
+        }
+
+        else if(www.isHttpError)
+        {
+            gameMgr.uiMgr.ShopFeedback("You don't have enough golds O:");
         }
 
         else
@@ -151,7 +158,9 @@ public class MineFarmAPIClient : MonoBehaviour {
             gameMgr.UnlockRock();
 
             // Refresh inventory.
-            StartCoroutine(RetrieveInventory());
+            StartCoroutine(RetrievePlayerData());
+            
+            gameMgr.uiMgr.ShopFeedback("You have unlocked a new rock :)");
         }
     }
 
@@ -159,7 +168,7 @@ public class MineFarmAPIClient : MonoBehaviour {
     /// Retrieve the inventory of the player when he connects to the game.
     /// </summary>
     /// <returns></returns>
-    public IEnumerator RetrieveInventory()
+    public IEnumerator RetrievePlayerData()
     {
         UnityWebRequest www = UnityWebRequest.Get(url + "/api/Gameplay/" + currentSession.userId);
         AddRequestHeaders(www);
@@ -181,6 +190,38 @@ public class MineFarmAPIClient : MonoBehaviour {
             Debug.Log("Status code : " + www.responseCode + "\n" + json);
         }
     }
+
+    /// <summary>
+    /// Retrieve the informations about cooldown and other if neededs...
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator RetrieveServerData()
+    {
+        UnityWebRequest www = UnityWebRequest.Get(url + "/api/Gameplay/Cooldowns");
+        AddRequestHeaders(www);
+
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+
+        else
+        {
+            string response = www.downloadHandler.text;
+            string[] strings = response.Split('/');
+
+            float[] cds = new float[strings.Length];
+            for (int i = 0; i < cds.Length; i++)
+            {
+                cds[i] = float.Parse(strings[i]);
+            }
+
+            gameMgr.cooldowns = cds;
+        }
+    }
+
 
     /// <summary>
     /// Try to mine. Can return the mine id or the time to mine.
